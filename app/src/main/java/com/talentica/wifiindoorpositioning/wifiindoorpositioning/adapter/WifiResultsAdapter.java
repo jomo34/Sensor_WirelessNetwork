@@ -1,7 +1,7 @@
 package com.talentica.wifiindoorpositioning.wifiindoorpositioning.adapter;
 
 import android.net.wifi.ScanResult;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -59,6 +59,7 @@ public class WifiResultsAdapter extends RecyclerView.Adapter<WifiResultsAdapter.
     public List<ScanResult> getResults() {
         return results;
     }
+
 
     public void setResults(List<ScanResult> results) {
         this.results = results;

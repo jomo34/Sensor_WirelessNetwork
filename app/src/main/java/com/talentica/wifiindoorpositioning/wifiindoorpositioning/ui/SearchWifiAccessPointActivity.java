@@ -8,12 +8,12 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -21,15 +21,16 @@ import android.widget.Button;
 import com.talentica.wifiindoorpositioning.wifiindoorpositioning.R;
 import com.talentica.wifiindoorpositioning.wifiindoorpositioning.adapter.WifiResultsAdapter;
 import com.talentica.wifiindoorpositioning.wifiindoorpositioning.model.AccessPoint;
-import com.talentica.wifiindoorpositioning.wifiindoorpositioning.model.IndoorProject;
 import com.talentica.wifiindoorpositioning.wifiindoorpositioning.utils.RecyclerItemClickListener;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by suyashg on 26/08/17.
@@ -48,6 +49,8 @@ public class SearchWifiAccessPointActivity extends AppCompatActivity implements 
     private List<ScanResult> results = new ArrayList<>();
     private WifiResultsAdapter wifiResultsAdapter = new WifiResultsAdapter();
     private boolean wifiWasEnabled;
+    private RealmResults<AccessPoint> project;
+    Realm realm = Realm.getDefaultInstance();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,6 +72,7 @@ public class SearchWifiAccessPointActivity extends AppCompatActivity implements 
         rvWifis.setAdapter(wifiResultsAdapter);
         rvWifis.addOnItemTouchListener(new RecyclerItemClickListener(this,rvWifis, this));
     }
+
 
     public void refresh() {
         handler.postDelayed(new Runnable() {
@@ -129,11 +133,13 @@ public class SearchWifiAccessPointActivity extends AppCompatActivity implements 
         }
     }
 
+
     class WifiListReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
             results = mainWifi.getScanResults();
+            RealmResults<AccessPoint> realmResults = realm.where(AccessPoint.class).findAll();
             Collections.sort(results, new Comparator<ScanResult>() {
                 @Override
                 public int compare(ScanResult scanResult, ScanResult scanResult2) {
