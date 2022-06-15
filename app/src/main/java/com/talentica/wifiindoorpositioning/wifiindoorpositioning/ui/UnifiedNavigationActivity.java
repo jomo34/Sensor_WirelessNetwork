@@ -2,8 +2,9 @@ package com.talentica.wifiindoorpositioning.wifiindoorpositioning.ui;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import androidx.annotation.Nullable;
+import android.support.annotation.Nullable;
 
+import com.talentica.wifiindoorpositioning.wifiindoorpositioning.R;
 import com.talentica.wifiindoorpositioning.wifiindoorpositioning.ui.frags.PrefsFragment;
 
 /**

@@ -78,10 +78,6 @@ public class Algorithms {
 			return KNN_WKNN_Algorithm(proj, observedRSSValues, parameter, false);
 		case 2:
 			return KNN_WKNN_Algorithm(proj, observedRSSValues, parameter, true);
-		case 3:
-			return MAP_MMSE_Algorithm(proj, observedRSSValues, parameter, false);
-		case 4:
-			return MAP_MMSE_Algorithm(proj, observedRSSValues, parameter, true);
 		}
 		return null;
 
@@ -148,59 +144,6 @@ public class Algorithms {
 	}
 
 	/**
-	 * Calculates user location based on Probabilistic Maximum A Posteriori
-	 * (MAP) Algorithm or Probabilistic Minimum Mean Square Error (MMSE)
-	 * Algorithm
-	 * 
-	 * @param proj
-	 *            the project details from db for current area
-	 * 
-	 * @param observedRssValues
-	 *            RSS values currently observed
-	 * @param parameter
-	 * 
-	 * @param isWeighted
-	 *            To be weighted or not
-	 * 
-	 * @return The estimated user location
-	 */
-	private static LocationWithNearbyPlaces MAP_MMSE_Algorithm(IndoorProject proj, ArrayList<Float> observedRssValues, String parameter, boolean isWeighted) {
-		RealmList<AccessPoint> rssValues;
-		double curResult = 0.0d;
-		String myLocation = null;
-		double highestProbability = Double.NEGATIVE_INFINITY;
-		ArrayList<LocDistance> locDistanceResultsList = new ArrayList<LocDistance>();
-		float sGreek;
-
-		try {
-			sGreek = Float.parseFloat(parameter);
-		} catch (Exception e) {
-			return null;
-		}
-
-		// Find the location of user with the highest probability
-		for (ReferencePoint referencePoint : proj.getRps()) {
-			rssValues = referencePoint.getReadings();
-			curResult = calculateProbability(rssValues, observedRssValues, sGreek);
-
-			if (curResult == Double.NEGATIVE_INFINITY)
-				return null;
-			else if (curResult > highestProbability) {
-				highestProbability = curResult;
-				myLocation = referencePoint.getLocId();
-			}
-
-			if (isWeighted)
-				locDistanceResultsList.add(0, new LocDistance(curResult, referencePoint.getLocId(), referencePoint.getName()));
-		}
-
-		if (isWeighted)
-			myLocation = calculateWeightedAverageProbabilityLocations(locDistanceResultsList);
-		LocationWithNearbyPlaces places = new LocationWithNearbyPlaces(myLocation, locDistanceResultsList);
-		return places;
-	}
-
-	/**
 	 * Calculates the Euclidean distance between the currently observed RSS
 	 * values and the RSS values for a specific location.
 	 * 
@@ -238,58 +181,6 @@ public class Algorithms {
 		return ((float) Math.sqrt(finalResult));
 	}
 
-	/**
-	 * Calculates the Probability of the user being in the currently observed
-	 * RSS values and the RSS values for a specific location.
-	 * 
-	 * @param l1
-	 *            RSS values of a location in stored in AP obj of locations
-	 * @param l2
-	 *            RSS values currently observed
-	 * 
-	 * @return The Probability for this location, or MIN_VALUE for error
-	 */
-	private static double calculateProbability(RealmList<AccessPoint> l1, ArrayList<Float> l2, float sGreek) {
-		double finalResult = 1;
-		float v1;
-		float v2;
-		double temp;
-
-		for (int i = 0; i < l1.size(); ++i) {
-
-			try {
-				v1 = (float) l1.get(i).getMeanRss();
-				v2 = l2.get(i);
-			} catch (Exception e) {
-				return Double.NEGATIVE_INFINITY;
-			}
-
-			temp = v1 - v2;
-
-			temp *= temp;
-
-			temp = -temp;
-
-			temp /= (double) (sGreek * sGreek);
-			temp = Math.exp(temp);
-
-			//Do not allow zero instead stop on small possibility
-			if (finalResult * temp != 0)
-				finalResult = finalResult * temp;
-		}
-		return finalResult;
-	}
-
-	/**
-	 * Calculates the Average of the K locations that have the shortest
-	 * distances D
-	 * 
-	 * @param LocDistance_Results_List
-	 *            Locations-Distances pairs sorted by distance
-	 * @param K
-	 *            The number of locations used
-	 * @return The estimated user location, or null for error
-	 */
 	private static String calculateAverageKDistanceLocations(ArrayList<LocDistance> LocDistance_Results_List, int K) {
 		float sumX = 0.0f;
 		float sumY = 0.0f;
@@ -370,118 +261,6 @@ public class Algorithms {
 		return WeightedSumX + " " + WeightedSumY;
 	}
 
-	/**
-	 * Calculates the Weighted Average over ALL locations where the weights are
-	 * the Normalized Probabilities
-	 * 
-	 * @param LocDistance_Results_List
-	 *            Locations-Probability pairs
-	 * 
-	 * @return The estimated user location, or null for error
-	 */
-	private static String calculateWeightedAverageProbabilityLocations(ArrayList<LocDistance> LocDistance_Results_List) {
-		double sumProbabilities = 0.0f;
-		double WeightedSumX = 0.0f;
-		double WeightedSumY = 0.0f;
-		double NP;
-		float x, y;
-		String[] LocationArray = new String[2];
-
-		// Calculate the sum of all probabilities
-		for (int i = 0; i < LocDistance_Results_List.size(); ++i)
-			sumProbabilities += LocDistance_Results_List.get(i).getDistance();
-
-		// Calculate the weighted (Normalized Probabilities) sum of X and Y
-		for (int i = 0; i < LocDistance_Results_List.size(); ++i) {
-			LocationArray = LocDistance_Results_List.get(i).getLocation().split(" ");
-
-			try {
-				x = Float.valueOf(LocationArray[0].trim()).floatValue();
-				y = Float.valueOf(LocationArray[1].trim()).floatValue();
-			} catch (Exception e) {
-				return null;
-			}
-
-			NP = LocDistance_Results_List.get(i).getDistance() / sumProbabilities;
-
-			WeightedSumX += (x * NP);
-			WeightedSumY += (y * NP);
-
-		}
-
-		return WeightedSumX + " " + WeightedSumY;
-
-	}
-
-	/**
-	 * Reads the parameters from the file
-	 * 
-	 * @param file
-	 *            the file of radiomap, to read parameters
-	 * 
-	 * @param algorithm_choice
-	 *            choice of several algorithms
-	 * 
-	 * @return The parameter for the algorithm
-	 * 
-	 */
-	private static String readParameter(File file, int algorithm_choice) {
-		String line;
-		BufferedReader reader = null;
-
-		String parameter = null;
-
-		try {
-			FileReader fr = new FileReader(file.getAbsolutePath().replace(".txt", "-parameters2.txt"));
-
-			reader = new BufferedReader(fr);
-
-			while ((line = reader.readLine()) != null) {
-
-				/* Ignore the labels */
-				if (line.startsWith("#") || line.trim().equals("")) {
-					continue;
-				}
-
-				/* Split fields */
-				String[] temp = line.split(":");
-
-				/* The file may be corrupted so ignore reading it */
-				if (temp.length != 2) {
-					return null;
-				}
-
-				if (algorithm_choice == 0 && temp[0].equals("NaN")) {
-					parameter = temp[1];
-					break;
-				} else if (algorithm_choice == 1 && temp[0].equals("KNN")) {
-					parameter = temp[1];
-					break;
-				} else if (algorithm_choice == 2 && temp[0].equals("WKNN")) {
-					parameter = temp[1];
-					break;
-				} else if (algorithm_choice == 3 && temp[0].equals("MAP")) {
-					parameter = temp[1];
-					break;
-				} else if (algorithm_choice == 4 && temp[0].equals("MMSE")) {
-					parameter = temp[1];
-					break;
-				}
-
-			}
-
-		} catch (Exception e) {
-			return null;
-		} finally {
-			if (reader != null)
-				try {
-					reader.close();
-				} catch (IOException e) {
-				}
-		}
-
-		return parameter;
-	}
 
 	private static String readParameter(int algorithm_choice) {
 		String parameter = null;

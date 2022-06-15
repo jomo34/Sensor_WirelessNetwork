@@ -1,11 +1,12 @@
 package com.talentica.wifiindoorpositioning.wifiindoorpositioning.adapter.holder;
 
-import androidx.recyclerview.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.talentica.wifiindoorpositioning.wifiindoorpositioning.model.ReferencePoint;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;

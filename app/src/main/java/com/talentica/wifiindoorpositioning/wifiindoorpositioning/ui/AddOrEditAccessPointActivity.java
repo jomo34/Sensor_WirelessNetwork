@@ -5,11 +5,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -104,27 +105,33 @@ public class AddOrEditAccessPointActivity extends AppCompatActivity implements V
             } else {
                 // Obtain a Realm instance
                 Realm realm = Realm.getDefaultInstance();
-                realm.beginTransaction();
-                IndoorProject project = realm.where(IndoorProject.class).equalTo("id", projectId).findFirst();
-                if (isEditMode) {
-                    apToBeEdited.setSsid(text);
-                    apToBeEdited.setDescription(desc);
-                    apToBeEdited.setX(Double.valueOf(x));
-                    apToBeEdited.setY(Double.valueOf(y));
-                    apToBeEdited.setMac_address(mac);
-                } else {
-                    AccessPoint accessPoint = realm.createObject(AccessPoint.class, UUID.randomUUID().toString());
-                    accessPoint.setBssid(mac);
-                    accessPoint.setDescription(desc);
-                    accessPoint.setCreatedAt(new Date());
-                    accessPoint.setX(Double.valueOf(x));
-                    accessPoint.setY(Double.valueOf(y));
-                    accessPoint.setSsid(text);
-                    accessPoint.setMac_address(mac);
-                    project.getAps().add(accessPoint);
+                if(realm.where(AccessPoint.class).equalTo("bssid",mac).findFirst()!=null){
+                    Snackbar.make(addAp, "이미존재하는 와이파이 입니다", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
                 }
-                realm.commitTransaction();
-                this.finish();
+                else {
+                    realm.beginTransaction();
+                    IndoorProject project = realm.where(IndoorProject.class).equalTo("id", projectId).findFirst();
+                    if (isEditMode) {
+                        apToBeEdited.setSsid(text);
+                        apToBeEdited.setDescription(desc);
+                        apToBeEdited.setX(Double.valueOf(x));
+                        apToBeEdited.setY(Double.valueOf(y));
+                        apToBeEdited.setMac_address(mac);
+                    } else {
+                        AccessPoint accessPoint = realm.createObject(AccessPoint.class, UUID.randomUUID().toString());
+                        accessPoint.setBssid(mac);
+                        accessPoint.setDescription(desc);
+                        accessPoint.setCreatedAt(new Date());
+                        accessPoint.setX(Double.valueOf(x));
+                        accessPoint.setY(Double.valueOf(y));
+                        accessPoint.setSsid(text);
+                        accessPoint.setMac_address(mac);
+                        project.getAps().add(accessPoint);
+                    }
+                    realm.commitTransaction();
+                    this.finish();
+                }
             }
         } else if (view.getId() == btnScanAP.getId()) {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
