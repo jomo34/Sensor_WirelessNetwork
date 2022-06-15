@@ -6,29 +6,33 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/noto">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="20dp"
+            android:fontFamily="@font/noto">
 
             <Button
                 android:id="@+id/bn_ap_scan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Select via Scan" />
+                android:fontFamily="@font/noto"
+                android:text="Select AP" />
 
             <EditText
                 android:id="@+id/et_ap_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:hint="SSID or Name"
+                android:hint="Please Type SSID"
                 android:inputType="text"
                 android:lines="1"
-                android:maxLength="50" />
+                android:maxLength="50"
+                android:fontFamily="@font/noto"/>
 
             <EditText
                 android:id="@+id/et_ap_desc"
@@ -38,20 +42,22 @@
                 android:hint="Description"
                 android:inputType="text"
                 android:lines="3"
-                android:maxLength="250" />
+                android:maxLength="250"
+                android:fontFamily="@font/noto"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:fontFamily="@font/noto"
                 android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/et_ap_x"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="x (decimal)"
+                    android:layout_height="0dp"
+                    android:fontFamily="@font/noto"
+                    android:text="0"
                     android:inputType="numberDecimal"
                     android:lines="1"
                     android:maxLength="10" />
@@ -59,31 +65,35 @@
                 <EditText
                     android:id="@+id/et_ap_y"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="y (decimal)"
+                    android:layout_height="0dp"
+                    android:text="0"
                     android:inputType="numberDecimal"
                     android:lines="1"
-                    android:maxLength="10" />
+                    android:maxLength="10"
+                    android:fontFamily="@font/noto"/>
+
+                <EditText
+                    android:id="@+id/et_ap_mac"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="MAC"
+                    android:inputType="text"
+                    android:lines="1"
+                    android:maxLength="50"
+                    android:fontFamily="@font/noto"/>
 
             </LinearLayout>
 
-            <EditText
-                android:id="@+id/et_ap_mac"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="MAC (optional)"
-                android:inputType="text"
-                android:lines="1"
-                android:maxLength="50" />
 
-            <Button
-                android:id="@+id/bn_ap_create"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Create" />
+
         </LinearLayout>
     </ScrollView>
+
+    <Button
+        android:id="@+id/bn_ap_create"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/noto"
+        android:text="Register AP" />
 </LinearLayout>

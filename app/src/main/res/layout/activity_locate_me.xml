@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fontFamily="@font/noto"
     android:orientation="vertical">
 
     <TextView
@@ -9,8 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:fontFamily="@font/noto"
         android:layout_margin="15dp"
-        android:text="You are near to: NA"
+        android:text="Current Location : NA"
         android:textSize="20sp" />
 
     <TextView
@@ -19,13 +21,15 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="15dp"
-        android:textSize="18sp"
-        android:text="The distance from stage behind recruitment is: " />
+        android:fontFamily="@font/noto"
+        android:text="How far away from Location : "
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tv_location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/noto"
         android:layout_gravity="center"
         android:layout_margin="15dp"
         android:textSize="18sp"
@@ -34,6 +38,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/noto"
         android:orientation="horizontal"
         android:padding="5dp"
         android:visibility="gone">
@@ -41,6 +46,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/noto"
             android:layout_weight="1"
             android:lines="1"
             android:text="Name"
@@ -49,6 +55,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/noto"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_weight="1"
@@ -59,6 +66,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/noto"
             android:layout_weight="1"
             android:gravity="center"
             android:lines="1"
@@ -67,9 +75,10 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_nearby_points"
         android:layout_width="match_parent"
+        android:fontFamily="@font/noto"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
         android:layout_weight="1"

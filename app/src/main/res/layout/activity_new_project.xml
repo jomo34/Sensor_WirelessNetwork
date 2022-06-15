@@ -3,13 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:fontFamily="@font/noto"
     android:padding="20dp">
 
     <EditText
         android:id="@+id/et_project_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Project Name"
+        android:fontFamily="@font/noto"
+        android:hint="Enter Project Name"
         android:inputType="textCapWords"
         android:lines="1"
         android:maxLength="50" />
@@ -18,8 +20,9 @@
         android:id="@+id/et_project_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/noto"
         android:layout_marginTop="20dp"
-        android:hint="Project Description"
+        android:hint="Enter Project Description"
         android:inputType="text"
         android:lines="3"
         android:maxLength="250" />
@@ -27,9 +30,10 @@
     <Button
         android:id="@+id/bn_project_create"
         android:layout_width="match_parent"
+        android:fontFamily="@font/noto"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Create" />
+        android:text="Create Project" />
 
 
 </LinearLayout>

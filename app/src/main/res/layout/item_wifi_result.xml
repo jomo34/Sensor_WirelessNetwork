@@ -2,24 +2,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:fontFamily="@font/noto"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/wifi_ssid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/noto"
         android:lines="1" />
 
     <TextView
         android:id="@+id/wifi_bssid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/noto"
         android:lines="1" />
 
     <TextView
         android:id="@+id/wifi_capabilities"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/noto"
         android:visibility="gone" />
 
     <TextView
@@ -27,12 +31,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:lines="1"
+        android:fontFamily="@font/noto"
         android:visibility="gone" />
 
     <TextView
         android:id="@+id/wifi_level"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/noto"
         android:lines="1" />
 
 </LinearLayout>

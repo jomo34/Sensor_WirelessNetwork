@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:fontFamily="@font/noto"
     android:padding="5dp">
 
     <TextView
@@ -11,17 +12,20 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Access Points"
+        android:fontFamily="@font/noto"
         android:textSize="18sp"
         android:textStyle="bold" />
 
     <TextView
         android:layout_width="70dp"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/noto"
         android:text="X" />
 
     <TextView
         android:layout_width="70dp"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/noto"
         android:text="Y" />
 
 </LinearLayout>
